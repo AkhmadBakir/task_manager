@@ -1,4 +1,5 @@
 public class Task {
+
     private Integer id;
     private String name;
     private String description;
@@ -42,4 +43,14 @@ public class Task {
         this.description = description;
         this.status = status;
     }
+
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
 }
