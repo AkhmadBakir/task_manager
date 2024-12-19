@@ -3,25 +3,29 @@ import java.util.List;
 import java.util.Map;
 
 public class Manager implements ManagerService {
-    Map<Integer, String> tasks = new HashMap<Integer, String>();
-    Map<Integer, String> epic = new HashMap<Integer, String>();
-    Map<Integer, String> subTask = new HashMap<Integer, String>();
-
+    Map<Integer, Task> tasks = new HashMap<>();
+    Map<Integer, Task> epic = new HashMap<>();
+    Map<Integer, Task> subTask = new HashMap<>();
 
     @Override
-    public Map<Integer, String> createTask(String name) {
-        tasks.put(1, name);
-        return Map.of();
+    public Map<Integer, Task> createTask(String name, String description, TaskStatus status) {
+        Task newtask = new Task(tasks.size() + 1, name, description, status );
+        tasks.put(tasks.size() + 1, newtask);
+        return tasks;
     }
 
     @Override
-    public Map<Integer, String> createEpic(String name) {
-        return Map.of();
+    public Map<Integer, Task> createEpic(String name, String description, TaskStatus status) {
+        Task newtask = new Task(epic.size() + 1, name, description, status );
+        epic.put(epic.size() + 1, newtask);
+        return epic;
     }
 
     @Override
-    public Map<Integer, String> createSubTask(String name) {
-        return Map.of();
+    public Map<Integer, Task> createSubTask(String name, String description, TaskStatus status) {
+        Task newtask = new Task(subTask.size() + 1, name, description, status );
+        subTask.put(subTask.size() + 1, newtask);
+        return subTask;
     }
 
     @Override
@@ -31,49 +35,57 @@ public class Manager implements ManagerService {
 
     @Override
     public void deleteAllTasks() {
-
+        tasks.clear();
+        epic.clear();
+        subTask.clear();
     }
 
     @Override
-    public void deleteTaskEpicSubTaskById(int id) {
-
+    public void deleteTaskEpicSubTaskById(int id) { //разделить
+        tasks.remove(id);
+        epic.remove(id);
+        subTask.remove(id);
     }
 
     @Override
     public Map<Integer, String> getSubTasksByEpicID(int id) {
+
         return Map.of();
     }
 
     @Override
-    public Map<Integer, String> updateTasksById(Map<Integer, String> map) {
-
-        return map;
+    public void updateTasksById(int id, String name, String description, TaskStatus status) {
+        tasks.get(id).setName(name);
+        tasks.get(id).setDescription(description);
+        tasks.get(id).setStatus(status);
     }
 
     @Override
-    public Map<Integer, String> updateEpicById(Map<Integer, String> map) {
-
-        return map;
+    public void updateEpicById(int id, String name, String description, TaskStatus status) {
+        epic.get(id).setName(name);
+        epic.get(id).setDescription(description);
+        epic.get(id).setStatus(status);
     }
 
     @Override
-    public Map<Integer, String> updateSubTaskById(Map<Integer, String> map) {
-
-        return map;
+    public void updateSubTaskById(int id, String name, String description, TaskStatus status) {
+        subTask.get(id).setName(name);
+        subTask.get(id).setDescription(description);
+        subTask.get(id).setStatus(status);
     }
 
     @Override
-    public Map<Integer, String> getTasksById(int id) {
-        return Map.of();
+    public String getTasksById(int id) {
+        return tasks.get(id).toString();
     }
 
     @Override
-    public Map<Integer, String> getEpicById(int id) {
-        return Map.of();
+    public String getEpicById(int id) {
+        return epic.get(id).toString();
     }
 
     @Override
-    public Map<Integer, String> getSubTasksById(int id) {
-        return Map.of();
+    public String getSubTasksById(int id) {
+        return subTask.get(id).toString();
     }
 }

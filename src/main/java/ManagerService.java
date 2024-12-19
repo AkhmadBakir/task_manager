@@ -6,11 +6,11 @@ public interface ManagerService {
 
     //методы для добавления задач, эпиков, подзадач
 
-    Map<Integer, String> createTask(String name);
+    Map<Integer, Task> createTask(String name, String description, TaskStatus status);
 
-    Map<Integer, String> createEpic(String name);
+    Map<Integer, Task> createEpic(String name, String description, TaskStatus status);
 
-    Map<Integer, String> createSubTask(String name);
+    Map<Integer, Task> createSubTask(String name, String description, TaskStatus status);
 
     //метод для получения списка всех подзадач в эпике
 
@@ -30,18 +30,18 @@ public interface ManagerService {
 
     //методы для обновления задач, эпиков, подзадач
 
-    Map<Integer, String>  updateTasksById(Map<Integer, String> map);
+    void  updateTasksById(int id, String name, String description, TaskStatus status);
 
-    Map<Integer, String>  updateEpicById(Map<Integer, String> map);
+    void  updateEpicById(int id, String name, String description, TaskStatus status);
 
-    Map<Integer, String>  updateSubTaskById(Map<Integer, String> map);
+    void  updateSubTaskById(int id, String name, String description, TaskStatus status);
 
     //методы для получения задач, эпиков, подзадач
 
-    Map<Integer, String> getTasksById(int id);
+    String getTasksById(int id);
 
-    Map<Integer, String> getEpicById(int id);
+    String getEpicById(int id);
 
-    Map<Integer, String> getSubTasksById(int id);
+    String getSubTasksById(int id);
 
 }
