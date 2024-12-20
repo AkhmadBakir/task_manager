@@ -8,7 +8,7 @@ public interface ManagerService {
 
     Map<Integer, Task> createTask(String name, String description, TaskStatus status);
 
-    Map<Integer, Task> createEpic(String name, String description, TaskStatus status);
+    Map<Integer, Map<Integer, SubTask>> createEpic(Map<Integer, SubTask> subTask);
 
     Map<Integer, Task> createSubTask(String name, String description, TaskStatus status);
 
@@ -47,5 +47,7 @@ public interface ManagerService {
     String getEpicById(int id);
 
     String getSubTasksById(int id);
+
+    void addSubTaskToEpic(Map<Integer, SubTask> subTask);
 
 }
