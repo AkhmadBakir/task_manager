@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Manager implements ManagerService {
     Map<Integer, Task> task = new HashMap<>();
-    Map<Integer, Task> epic = new HashMap<>();
+    Map<Integer, Map<Integer, SubTask>> epic = new HashMap<>();
     Map<Integer, Task> subTask = new HashMap<>();
 
     @Override
@@ -15,9 +15,8 @@ public class Manager implements ManagerService {
     }
 
     @Override
-    public Map<Integer, Task> createEpic(String name, String description, TaskStatus status) {
-        Epic newEpic = new Epic(epic.size() + 1, name, description, status );
-        epic.put(epic.size() + 1, newEpic);
+    public Map<Integer, Map<Integer, SubTask>> createEpic(Map<Integer, SubTask> subTask) {
+        epic.put(epic.size() + 1, subTask);
         return epic;
     }
 
@@ -27,6 +26,8 @@ public class Manager implements ManagerService {
         subTask.put(subTask.size() + 1, newSubTask);
         return subTask;
     }
+
+
 
     @Override
     public List<Map<Integer, String>> getSubTasksInEpic(int id) {
@@ -95,5 +96,10 @@ public class Manager implements ManagerService {
     @Override
     public String getSubTasksById(int id) {
         return subTask.get(id).toString();
+    }
+
+    @Override
+    public void addSubTaskToEpic(Map<Integer, SubTask> subTask) {
+        epic.put(epic.size() + 1, subTask);
     }
 }
