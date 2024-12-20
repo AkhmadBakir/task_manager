@@ -22,7 +22,11 @@ public interface ManagerService {
 
     //методы для удаления задач, эпиков, подзадач по id
 
-    void deleteTaskEpicSubTaskById(int id);
+    void deleteTaskById(int id);
+
+    void deleteEpicById(int id);
+
+    void deleteSubTaskById(int id);
 
     //Проверка статуса эпика
 

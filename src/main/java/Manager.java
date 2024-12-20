@@ -3,28 +3,28 @@ import java.util.List;
 import java.util.Map;
 
 public class Manager implements ManagerService {
-    Map<Integer, Task> tasks = new HashMap<>();
+    Map<Integer, Task> task = new HashMap<>();
     Map<Integer, Task> epic = new HashMap<>();
     Map<Integer, Task> subTask = new HashMap<>();
 
     @Override
     public Map<Integer, Task> createTask(String name, String description, TaskStatus status) {
-        Task newtask = new Task(tasks.size() + 1, name, description, status );
-        tasks.put(tasks.size() + 1, newtask);
-        return tasks;
+        Task newTask = new Task(task.size() + 1, name, description, status );
+        task.put(task.size() + 1, newTask);
+        return task;
     }
 
     @Override
     public Map<Integer, Task> createEpic(String name, String description, TaskStatus status) {
-        Task newtask = new Task(epic.size() + 1, name, description, status );
-        epic.put(epic.size() + 1, newtask);
+        Epic newEpic = new Epic(epic.size() + 1, name, description, status );
+        epic.put(epic.size() + 1, newEpic);
         return epic;
     }
 
     @Override
     public Map<Integer, Task> createSubTask(String name, String description, TaskStatus status) {
-        Task newtask = new Task(subTask.size() + 1, name, description, status );
-        subTask.put(subTask.size() + 1, newtask);
+        SubTask newSubTask = new SubTask(subTask.size() + 1, name, description, status );
+        subTask.put(subTask.size() + 1, newSubTask);
         return subTask;
     }
 
@@ -35,15 +35,23 @@ public class Manager implements ManagerService {
 
     @Override
     public void deleteAllTasks() {
-        tasks.clear();
+        task.clear();
         epic.clear();
         subTask.clear();
     }
 
     @Override
-    public void deleteTaskEpicSubTaskById(int id) { //разделить
-        tasks.remove(id);
+    public void deleteTaskById(int id) { //разделить
+        task.remove(id);
+    }
+
+    @Override
+    public void deleteEpicById(int id) { //разделить
         epic.remove(id);
+    }
+
+    @Override
+    public void deleteSubTaskById(int id) {
         subTask.remove(id);
     }
 
@@ -55,9 +63,9 @@ public class Manager implements ManagerService {
 
     @Override
     public void updateTasksById(int id, String name, String description, TaskStatus status) {
-        tasks.get(id).setName(name);
-        tasks.get(id).setDescription(description);
-        tasks.get(id).setStatus(status);
+        task.get(id).setName(name);
+        task.get(id).setDescription(description);
+        task.get(id).setStatus(status);
     }
 
     @Override
@@ -76,7 +84,7 @@ public class Manager implements ManagerService {
 
     @Override
     public String getTasksById(int id) {
-        return tasks.get(id).toString();
+        return task.get(id).toString();
     }
 
     @Override
