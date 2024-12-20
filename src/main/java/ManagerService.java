@@ -1,5 +1,3 @@
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public interface ManagerService {
@@ -8,13 +6,13 @@ public interface ManagerService {
 
     Map<Integer, Task> createTask(String name, String description, TaskStatus status);
 
-    Map<Integer, Map<Integer, SubTask>> createEpic(Map<Integer, SubTask> subTask);
+    Map<Integer, Epic> createEpic(String name, String description, TaskStatus status, Manager subTask);
 
-    Map<Integer, Task> createSubTask(String name, String description, TaskStatus status);
+    Map<Integer, SubTask> createSubTask(String name, String description, TaskStatus status);
 
     //метод для получения списка всех подзадач в эпике
 
-    List<Map<Integer, String>> getSubTasksInEpic(int id);
+    Manager getSubTasksInEpic(int epicId);
 
     //методы для удаления всех задач, эпиков, подзадач
 
@@ -30,11 +28,11 @@ public interface ManagerService {
 
     //Проверка статуса эпика
 
-    Map<Integer, String> getSubTasksByEpicID(int id);
+    //Map<Integer, String> getSubTasksByEpicID(int id);
 
     //методы для обновления задач, эпиков, подзадач
 
-    void  updateTasksById(int id, String name, String description, TaskStatus status);
+    void  updateTaskById(int id, String name, String description, TaskStatus status);
 
     void  updateEpicById(int id, String name, String description, TaskStatus status);
 
@@ -42,12 +40,18 @@ public interface ManagerService {
 
     //методы для получения задач, эпиков, подзадач
 
-    String getTasksById(int id);
+    Task getTaskById(int id);
 
-    String getEpicById(int id);
+    Epic getEpicById(int id);
 
-    String getSubTasksById(int id);
+    SubTask getSubTaskById(int id);
 
-    void addSubTaskToEpic(Map<Integer, SubTask> subTask);
+    void addToSubTask(String name, String description, TaskStatus status);
+
+    String getTask();
+
+    String getEpic();
+
+    String getSubTask();
 
 }
