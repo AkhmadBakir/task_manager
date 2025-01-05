@@ -2,58 +2,51 @@
 public class Main {
     public static void main(String[] args) {
 
-        Manager task1 = new Manager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
-        task1.createTask("Сделать домашку", "Сделать всю домашку до воскресенья", TaskStatus.NEW);
+        manager.createTask("Сделать домашку", "Сделать всю домашку до воскресенья", TaskStatus.NEW);
 
-        System.out.println(task1.getTaskById(1));
+        System.out.println(manager.getTaskById(1));
 
-        task1.updateTaskById(1, "Сделать домашку", "Сделать всю домашку до воскресенья", TaskStatus.DONE);
+        manager.updateTaskById(1, "Сделать домашку", "Сделать всю домашку до воскресенья", TaskStatus.DONE);
 
-        System.out.println(task1.getTaskById(1));
+        System.out.println(manager.getTaskById(1));
 
-        Manager task2 = new Manager();
+        manager.createTask("Сходить в магазин", "Купить еду", TaskStatus.NEW);
 
-        task2.createTask("Сходить в магазин", "Купить еду", TaskStatus.NEW);
+       System.out.println(manager.getTaskById(2));
 
-        System.out.println(task2.getTaskById(1).toString());
+        manager.createTask("Сходить в кино", "Купить билеты", TaskStatus.NEW);
 
-        task2.createTask("Сходить в кино", "Купить билеты", TaskStatus.NEW);
+        manager.updateTaskById(3, "Сходил в кино", "Купил билеты", TaskStatus.DONE);
 
-        System.out.println(task2.getTask());
+        System.out.println(manager.getTaskById(3));
 
-        task2.deleteTaskById(2);
+        manager.createEpic("Сделать ремонт", "Ремонт должен быть хорошим", TaskStatus.IN_PROGRESS);
 
-        System.out.println(task2.getTask());
+        manager.createSubTask("Сделать полы", "Полы из ламината", TaskStatus.DONE, 1);
 
-        task2.updateTaskById(1, "Сходил в кино", "Купил билеты", TaskStatus.DONE);
+        manager.createEpic("Построить дом", "Дом должен быть большим", TaskStatus.IN_PROGRESS);
 
-        System.out.println(task2.getTask());
+        manager.createSubTask("Сделать фундамент", "Фундамент из бетона", TaskStatus.DONE, 2);
 
-        Manager subTasksHouseBuilder = new Manager();
+        manager.createSubTask("Поклеить обои", "Обои красивые", TaskStatus.DONE, 1);
 
-        subTasksHouseBuilder.createSubTask("Сделать фундамент", "Фундамент из бетона", TaskStatus.IN_PROGRESS);
+        manager.createSubTask("Сделать стены", "Стены из досок", TaskStatus.DONE, 2);
 
-        subTasksHouseBuilder.addToSubTask("Сделать стены", "Стены из досок", TaskStatus.IN_PROGRESS);
+        manager.createSubTask("Сделать потолок", "Потолок натяжной", TaskStatus.IN_PROGRESS, 1);
 
-        subTasksHouseBuilder.addToSubTask("Сделать крышу", "Крыша из металла", TaskStatus.IN_PROGRESS);
+        manager.createSubTask("Сделать крышу", "Крыша из металла", TaskStatus.IN_PROGRESS, 2);
 
-        Manager epicHouseBuilder = new Manager();
+        System.out.println(manager.getSubTaskById(3));
 
-        epicHouseBuilder.createEpic("Построить дом", "Дом должен быть большим", TaskStatus.IN_PROGRESS, subTasksHouseBuilder);
+        System.out.println(manager.getEpicById(1));
 
-        System.out.println(epicHouseBuilder.getEpic());
+        System.out.println(manager.getSubTasksInEpic(1));
 
-        System.out.println(epicHouseBuilder.getEpicById(1));
+        System.out.println(manager.getEpicByIdWithSubTasks(1));
 
-        System.out.println(epicHouseBuilder.getSubTasksInEpic(1)); //Выдает ссылку на объект класса Manager
-
-        subTasksHouseBuilder.updateSubTaskById(1,"Сделать фундамент", "Фундамент из бетона", TaskStatus.DONE);
-
-        epicHouseBuilder.deleteAllTasks();
-
-        System.out.println(epicHouseBuilder.getEpic());
-
+        System.out.println(manager.getHistory());
 
     }
 }
