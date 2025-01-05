@@ -44,9 +44,9 @@ public class Main {
 
         System.out.println(manager.getSubTasksInEpic(1));
 
-        System.out.println(manager.getEpicByIdWithSubTasks(1));
+        System.out.println(manager.getEpicById(1));
 
-        System.out.println(manager.getHistory());
+        System.out.println(manager.getHistory().size());
 
 
     }

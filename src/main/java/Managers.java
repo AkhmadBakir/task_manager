@@ -1,9 +1,8 @@
 public class Managers {
 
+    static InMemoryHistoryManager historyFromManagers = new InMemoryHistoryManager();
     public static HistoryManager getDefaultHistory() {
-        InMemoryHistoryManager history = new InMemoryHistoryManager();
-
-        return history;
+        return historyFromManagers;
     }
 
 }

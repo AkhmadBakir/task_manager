@@ -7,6 +7,11 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
+        for (int i = 1; i <= 10; i++) {
+            if (tasksHistory.size() == 10) {
+                tasksHistory.remove(0);
+            }
+        }
         tasksHistory.add(task);
     }
 
