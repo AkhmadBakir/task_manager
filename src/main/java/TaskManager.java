@@ -55,6 +55,6 @@ public interface TaskManager {
 
     String getSubTask();
 
-    //InMemoryHistoryManager getHistory();
+    List<Task> getHistory();
 
 }

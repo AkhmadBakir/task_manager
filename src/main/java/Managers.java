@@ -1,8 +1,16 @@
+
+// Утилитарный класс, отвечающий за создание менеджера задач
 public class Managers {
 
-    static InMemoryHistoryManager historyFromManagers = new InMemoryHistoryManager();
-    public static HistoryManager getDefaultHistory() {
-        return historyFromManagers;
+    // Метод, возвращающий объект-менеджер
+    public static TaskManager getDefault() {
+        return new InMemoryTaskManager();
     }
+
+    // Метод, возвращающий объект— историю просмотров
+    public static HistoryManager getDefaultHistory() {
+        return new InMemoryHistoryManager();
+    }
+
 
 }
