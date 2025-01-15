@@ -16,6 +16,7 @@ public class InMemoryTaskManager implements TaskManager {
         return task;
     }
 
+    @Override
     public Map<Integer, Epic> createEpic(String name, String description, TaskStatus status) {
         Epic newEpic = new Epic(epic.size() + 1, name, description, status);
         epic.put(epic.size() + 1, newEpic);
@@ -48,24 +49,30 @@ public class InMemoryTaskManager implements TaskManager {
         task.clear();
         epic.clear();
         subTask.clear();
+        history.removeAll();
     }
 
     @Override
     public void deleteTaskById(int id) {
+        history.remove(task.get(id));
         task.remove(id);
-        history.remove(id);
     }
 
     @Override
-    public void deleteEpicById(int id) {
-        epic.remove(id);
-        history.remove(id);
+    public void deleteEpicById(int epicId) {
+        Map<Integer, SubTask> subTasksInEpic = getSubTasksInEpic(epicId);
+        for (int key : subTasksInEpic.keySet()) {
+            history.remove(subTask.get(key));
+            subTask.remove(key);
+        }
+        history.remove(epic.get(epicId));
+        epic.remove(epicId);
     }
 
     @Override
     public void deleteSubTaskById(int id) {
+        history.remove(subTask.get(id));
         subTask.remove(id);
-        history.remove(id);
     }
 
     @Override
