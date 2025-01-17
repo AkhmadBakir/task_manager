@@ -1,14 +1,14 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomLinkedList<T> {
+public class CustomLinkedList<T extends Task> {
 
-    public static class Node<T> {
-        T data;
-        Node<T> prev;
-        Node<T> next;
+    public static class Node<E> {
+        E data;
+        Node<E> prev;
+        Node<E> next;
 
-        Node(T data) {
+        Node(E data) {
             this.data = data;
         }
     }

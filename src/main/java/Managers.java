@@ -7,7 +7,7 @@ public class Managers {
         return new InMemoryTaskManager();
     }
 
-    // Метод, возвращающий объект— историю просмотров
+    // Метод, возвращающий объект историю просмотров
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }

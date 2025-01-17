@@ -3,8 +3,8 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private CustomLinkedList<Task> tasksHistory = new CustomLinkedList<>(10);
-    private HashMap<Integer, CustomLinkedList.Node<Task>> nodeMap = new HashMap<>();
+    private final CustomLinkedList<Task> tasksHistory = new CustomLinkedList<>(10);
+    private final HashMap<Integer, CustomLinkedList.Node<Task>> nodeMap = new HashMap<>();
 
     @Override
     public void add(Task task) {
@@ -22,9 +22,9 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void remove(Task task) {
-        tasksHistory.removeNode(nodeMap.get(task.getId()));
-        nodeMap.remove(task.getId());
+    public void remove(int id) {
+        tasksHistory.removeNode(nodeMap.get(id));
+        nodeMap.remove(id);
     }
 
     @Override

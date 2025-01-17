@@ -1,6 +1,3 @@
-import java.io.File;
-import java.util.stream.Stream;
-
 public class Main {
     public static void main(String[] args) {
 
@@ -32,9 +29,12 @@ public class Main {
         System.out.println(manager.getSubTaskById(5));
         System.out.println(manager.getSubTaskById(6));
 
-        manager.deleteEpicById(1);
+        System.out.println(manager.subTask.toString());
 
-        System.out.println(manager.getHistory());
+        manager.deleteEpicById(2);
+
+        System.out.println(manager.subTask.toString());
+
 
     }
 }
