@@ -1,7 +1,5 @@
-import java.util.Map;
-
 public class SubTask extends Task {
-    private int epicId;
+    private final int epicId;
 
     public SubTask(Integer id, String name, String description, TaskStatus status, int epicId) {
         super(id, name, description, status);

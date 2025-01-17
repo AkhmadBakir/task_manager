@@ -7,40 +7,27 @@ public class InMemoryTaskManager implements TaskManager {
     Map<Integer, Epic> epic = new HashMap<>();
     Map<Integer, SubTask> subTask = new HashMap<>();
 
-    InMemoryHistoryManager history = new InMemoryHistoryManager();
+    private final HistoryManager history = Managers.getDefaultHistory();
 
     @Override
-    public Map<Integer, Task> createTask(String name, String description, TaskStatus status) {
-        Task newTask = new Task(task.size() + 1, name, description, status );
-        task.put(task.size() + 1, newTask);
-        return task;
-    }
-
-    public Map<Integer, Epic> createEpic(String name, String description, TaskStatus status) {
-        Epic newEpic = new Epic(epic.size() + 1, name, description, status);
-        epic.put(epic.size() + 1, newEpic);
-        return epic;
+    public void createTask(String name, String description, TaskStatus status) {
+        task.put(task.size() + 1, new Task(task.size() + 1, name, description, status ));
     }
 
     @Override
-    public Map<Integer, SubTask> createSubTask(String name, String description, TaskStatus status, int epicId) {
-        SubTask newSubTask = new SubTask(subTask.size() + 1, name, description, status, epicId);
-        epic.get(epicId).addSubTask(newSubTask.getId());
-        subTask.put(subTask.size() + 1, newSubTask);
-        return subTask;
+    public void createEpic(String name, String description, TaskStatus status) {
+        epic.put(epic.size() + 1, new Epic(epic.size() + 1, name, description, status));
     }
 
     @Override
-    public Map<Integer, SubTask> getSubTasksInEpic(int epicId) {
-        Map<Integer, SubTask> subTasksInEpic = new HashMap<>();
-        List<Integer> subTaskIds = epic.get(epicId).getSubTaskIds();
-        for (Integer id : subTaskIds) {
-            SubTask subTaskInstance = subTask.get(id);
-            if (subTaskInstance != null) {
-                subTasksInEpic.put(subTasksInEpic.size() + 1, subTaskInstance);
-            }
-        }
-        return subTasksInEpic;
+    public void createSubTask(String name, String description, TaskStatus status, int id) {
+        epic.get(id).addSubTask(new SubTask(subTask.size() + 1, name, description, status, id).getId());
+        subTask.put(subTask.size() + 1, new SubTask(subTask.size() + 1, name, description, status, id));
+    }
+
+    @Override
+    public List<Integer> getSubTasksInEpic(int id) {
+        return epic.get(id).getSubTaskIds();
     }
 
     @Override
@@ -48,20 +35,31 @@ public class InMemoryTaskManager implements TaskManager {
         task.clear();
         epic.clear();
         subTask.clear();
+        history.removeAll();
     }
 
     @Override
     public void deleteTaskById(int id) {
+        history.remove(id);
         task.remove(id);
     }
 
     @Override
     public void deleteEpicById(int id) {
-        epic.remove(id);
+        if (epic.containsKey(id)) {
+            List<Integer> subtasksId = epic.get(id).getSubTaskIds();
+            for (Integer idSubtask : subtasksId) {
+                history.remove(idSubtask);
+                subTask.remove(idSubtask);
+            }
+            history.remove(id);
+            epic.remove(id);
+        }
     }
 
     @Override
     public void deleteSubTaskById(int id) {
+        history.remove(id);
         subTask.remove(id);
     }
 
@@ -99,15 +97,6 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Epic, Map<Integer, SubTask>> getEpicByIdWithSubTasks(int epicId) {
-        Map<Epic, Map<Integer, SubTask>> epicSubTasks = new HashMap<>();
-        Map<Integer, SubTask> subTaskMap = getSubTasksInEpic(epicId);
-        epicSubTasks.put(epic.get(epicId), subTaskMap);
-        history.add(epic.get(epicId));
-        return epicSubTasks;
-    }
-
-    @Override
     public SubTask getSubTaskById(int id) {
         history.add(subTask.get(id));
         return subTask.get(id);
@@ -128,8 +117,7 @@ public class InMemoryTaskManager implements TaskManager {
         return subTask.toString();
     }
 
-    public List<Task> getHistory() {
-        return history.getHistory();
-    }
+    @Override
+    public List<Task> getHistory() { return history.getTasks(); }
 
 }

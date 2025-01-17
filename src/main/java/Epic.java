@@ -3,7 +3,7 @@ import java.util.List;
 
 public class Epic extends Task {
 
-    private List<Integer> subTaskIds;
+    private final List<Integer> subTaskIds;
     
     public Epic(int id, String name, String description, TaskStatus status) {
         super(id, name, description, status);
