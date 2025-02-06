@@ -1,8 +1,9 @@
 public class SubTask extends Task {
+
     private final int epicId;
 
-    public SubTask(Integer id, String name, String description, TaskStatus status, int epicId) {
-        super(id, name, description, status);
+    public SubTask(int id, String name, String description, TaskStatus status, TaskType type, int epicId) {
+        super(id, name, description, status, type);
         this.epicId = epicId;
     }
 
@@ -12,6 +13,7 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        return super.toString() + ", epicId=" + epicId;
+        return super.toString() + "," +  epicId;
     }
+
 }
