@@ -1,12 +1,13 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Epic extends Task {
 
     private final List<Integer> subTaskIds;
     
-    public Epic(int id, String name, String description, TaskStatus status) {
-        super(id, name, description, status);
+    public Epic(int id, String name, String description, TaskStatus status, TaskType type) {
+        super(id, name, description, status, type);
         this.subTaskIds = new ArrayList<Integer>();
     }
 
@@ -18,11 +19,21 @@ public class Epic extends Task {
         subTaskIds.add(subTaskId);
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + ", subTaskIds=" + subTaskIds;
+    public void removeSubTask(int subTaskId) {
+        subTaskIds.remove(Integer.valueOf(subTaskId));
     }
 
-
-
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<Integer> iterator = subTaskIds.iterator();
+        while (iterator.hasNext()) {
+            int subTaskId = iterator.next();
+            stringBuilder.append(subTaskId);
+            if (iterator.hasNext()) {
+                stringBuilder.append("/");
+            }
+        }
+        return super.toString() + "," + stringBuilder.toString();
+    }
 }

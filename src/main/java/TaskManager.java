@@ -1,13 +1,12 @@
 import java.util.List;
-import java.util.Map;
 
 public interface TaskManager {
 
-    void createTask(String name, String description, TaskStatus status);
+    void createTask(String name, String description, TaskStatus status, TaskType type);
 
-    void createEpic(String name, String description, TaskStatus status);
+    void createEpic(String name, String description, TaskStatus status, TaskType type);
 
-    void createSubTask(String name, String description, TaskStatus status, int epicId);
+    void createSubTask(String name, String description, TaskStatus status, TaskType type, int epicId);
 
     List<Integer> getSubTasksInEpic(int epicId);
 
@@ -30,12 +29,6 @@ public interface TaskManager {
     Epic getEpicById(int id);
 
     SubTask getSubTaskById(int id);
-
-    String getTask();
-
-    String getEpic();
-
-    String getSubTask();
 
     List<Task> getHistory();
 

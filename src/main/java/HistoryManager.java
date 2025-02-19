@@ -4,9 +4,11 @@ public interface HistoryManager {
 
     void add(Task task);
 
-    void remove(int id);
+    void remove(int id, TaskType type);
 
     List<Task> getTasks();
 
     void removeAll();
+
+    String toString();
 }
