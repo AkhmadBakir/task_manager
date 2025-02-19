@@ -18,6 +18,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             String firstStringInFile = "id,name,description,status,type";
             fileWriter.write(firstStringInFile + "\n\n");
 
+            int identifier = getIdentifier();
+            fileWriter.write(Integer.toString(identifier) + "\n");
+
             for (Map.Entry<Integer, Task> entry : task.entrySet()) {
                 Task task1 = entry.getValue();
                 fileWriter.write(task1.toString() + "\n");
@@ -54,23 +57,28 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         TaskStatus status = TaskStatus.valueOf(makeTaskString[3].trim());
         TaskType type = TaskType.valueOf(makeTaskString[4].trim());
 
-        if (makeTaskString[4].equals("TASK_TYPE")) {
-            return new Task(id, name, description, status, type);
-        } else if (makeTaskString[4].equals("EPIC_TYPE")) {
-            Epic epic = new Epic(id, name, description, status, type);
-            if (makeTaskString.length > 5 && !makeTaskString[5].trim().isEmpty()) {
-                String[] subTaskString = makeTaskString[5].trim().split("/");
-                for (String s : subTaskString) {
-                    epic.addSubTask(Integer.parseInt(s.trim()));
+        switch (makeTaskString[4]) {
+            case "TASK_TYPE" -> {
+                return new Task(id, name, description, status, type);
+            }
+            case "EPIC_TYPE" -> {
+                Epic epic = new Epic(id, name, description, status, type);
+                if (makeTaskString.length > 5 && !makeTaskString[5].trim().isEmpty()) {
+                    String[] subTaskString = makeTaskString[5].trim().split("/");
+                    for (String s : subTaskString) {
+                        epic.addSubTask(Integer.parseInt(s.trim()));
+                    }
+                    return epic;
                 }
-                return epic;
             }
-        } else if (makeTaskString[4].equals("SUBTASK_TYPE")) {
-            if (makeTaskString.length <= 5) {
-                throw new IllegalArgumentException("Отсутствует id эпика для подзадачи: " + value);
+            case "SUBTASK_TYPE" -> {
+                if (makeTaskString.length <= 5) {
+                    throw new IllegalArgumentException("Отсутствует id эпика для подзадачи: " + value);
+                }
+                int epicId = Integer.parseInt(makeTaskString[5].trim());
+                return new SubTask(id, name, description, status, type, epicId);
             }
-            int epicId = Integer.parseInt(makeTaskString[5].trim());
-            return new SubTask(id, name, description, status, type, epicId);
+            default -> throw new IllegalArgumentException("Неизвестный тип задачи: " + value);
         }
         return null;
     }
@@ -94,16 +102,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
              BufferedReader bufferedReader = new BufferedReader(fileReader)) {
             bufferedReader.readLine();
             bufferedReader.readLine();
+            bufferedReader.readLine();
 
             String[] makeTaskString = value.split(",");
             List<Task> history = new ArrayList<>();
 
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                line = line.trim();
+            while (((line = bufferedReader.readLine()) != null) && !line.trim().isEmpty()) {
                 if (!line.isEmpty()) {
                     for (int i = 0; i < makeTaskString.length; i++) {
-                        if (makeTaskString[i].equals(line.charAt(0))) {
+                        if (makeTaskString[i].equals(String.valueOf(line.charAt(0)))) {
                             history.add(fromString(line));
                         }
                     }
@@ -130,30 +138,34 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                 if (!line.isEmpty()) {
                     String[] makeTaskString = line.split(",");
 
-                    if (makeTaskString.length < 5) {
-                        throw new IllegalArgumentException("Некорректный формат строки: " + line);
-                    }
-
                     int id = Integer.parseInt(makeTaskString[0].trim());
 
-                    if (makeTaskString[4].equals("TASK_TYPE")) {
-                        Task task = fromString(line);
-                        fileBackedTasksManager.task.put(id, task);
-                    } else if (makeTaskString[4].equals("EPIC_TYPE")) {
-                        Epic epic = (Epic) fromString(line);
-                        fileBackedTasksManager.epic.put(id, epic);
-                    } else if (makeTaskString[4].equals("SUBTASK_TYPE")) {
-                        SubTask subTask1 = (SubTask) fromString(line);
-                        fileBackedTasksManager.subTask.put(id, subTask1);
+                    if (makeTaskString.length == 1) {
+                        fileBackedTasksManager.setIdentifier(Integer.parseInt(makeTaskString[0].trim()));
+                    } else {
+                        switch (makeTaskString[4]) {
+                            case "TASK_TYPE" -> {
+                                Task task = fromString(line);
+                                fileBackedTasksManager.task.put(id, task);
+                            }
+                            case "EPIC_TYPE" -> {
+
+                                Epic epic = (Epic) fromString(line);
+                                fileBackedTasksManager.epic.put(id, epic);
+                            }
+                            case "SUBTASK_TYPE" -> {
+                                SubTask subTask1 = (SubTask) fromString(line);
+                                fileBackedTasksManager.subTask.put(id, subTask1);
+                            }
+                        }
                     }
                 }
             }
+
             List<String> lines = Files.readAllLines(Paths.get("history.csv"));
-            for (int i = lines.size() - 1; i >= 0; i--) {
-                String historyLine = lines.get(i).trim();
-                if (!historyLine.isEmpty()) {
-                    historyFromString(historyLine);
-                }
+            String historyLine = lines.get(lines.size() - 1).trim();
+            if (!historyLine.isEmpty() && !historyLine.trim().isEmpty()) {
+                fileBackedTasksManager.setHistory(historyFromString(historyLine));
             }
 
             return fileBackedTasksManager;
@@ -279,21 +291,32 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 //        System.out.println(fileBackedTasksManager1.getSubTaskById(9));
 //        System.out.println(fileBackedTasksManager1.getHistory());
 
-        FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(file);
+//        FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(file);
 
-        System.out.println(fileBackedTasksManager2.getTaskById(1));
-        System.out.println(fileBackedTasksManager2.getEpicById(2));
-        System.out.println(fileBackedTasksManager2.getSubTaskById(3));
-        System.out.println(fileBackedTasksManager2.getSubTaskById(4));
-        System.out.println(fileBackedTasksManager2.getSubTaskById(5));
-        System.out.println(fileBackedTasksManager2.getEpicById(6));
-        System.out.println(fileBackedTasksManager2.getSubTaskById(7));
-        System.out.println(fileBackedTasksManager2.getSubTaskById(8));
-        System.out.println(fileBackedTasksManager2.getSubTaskById(9));
-        System.out.println(fileBackedTasksManager2.getHistory());
+//        System.out.println(fileBackedTasksManager2.getTaskById(1));
+//        System.out.println(fileBackedTasksManager2.getEpicById(2));
+//        System.out.println(fileBackedTasksManager2.getSubTaskById(3));
+//        System.out.println(fileBackedTasksManager2.getSubTaskById(4));
+//        System.out.println(fileBackedTasksManager2.getSubTaskById(5));
+//        System.out.println(fileBackedTasksManager2.getEpicById(6));
+//        System.out.println(fileBackedTasksManager2.getSubTaskById(7));
+//        System.out.println(fileBackedTasksManager2.getSubTaskById(8));
+//        System.out.println(fileBackedTasksManager2.getSubTaskById(9));
+//        System.out.println(fileBackedTasksManager2.getHistory());
 
-        System.out.println(fileBackedTasksManager2.getEpicById(6));
-        fileBackedTasksManager2.updateSubTaskById(9,"Сделать крышу","Крыша из металла",TaskStatus.DONE);
-        System.out.println(fileBackedTasksManager2.getEpicById(6));
+//        fileBackedTasksManager2.deleteEpicById(2);
+
+//        fileBackedTasksManager2.createTask("Сходить в театр", "Билеты куплены", TaskStatus.IN_PROGRESS, TaskType.TASK_TYPE);
+//        System.out.println(fileBackedTasksManager2.getTaskById(10));
+//        fileBackedTasksManager2.deleteTaskById(10);
+//        System.out.println(fileBackedTasksManager2.getEpicById(2));
+//        System.out.println(fileBackedTasksManager2.getHistory());
+
+//        fileBackedTasksManager2.createTask("Сходить в кино", "Купить билеты", TaskStatus.IN_PROGRESS, TaskType.TASK_TYPE);
+//        fileBackedTasksManager2.createEpic("Сделать ремонт", "Ремонт должен быть хорошим", TaskStatus.IN_PROGRESS, TaskType.EPIC_TYPE);
+//        fileBackedTasksManager2.createSubTask("Сделать полы", "Полы из ламината", TaskStatus.DONE, TaskType.SUBTASK_TYPE, 11);
+//        fileBackedTasksManager2.createSubTask("Поклеить обои", "Обои красивые", TaskStatus.DONE, TaskType.SUBTASK_TYPE, 11);
+//        fileBackedTasksManager2.createSubTask("Сделать потолок", "Потолок натяжной", TaskStatus.IN_PROGRESS, TaskType.SUBTASK_TYPE, 11);
+
     }
 }
