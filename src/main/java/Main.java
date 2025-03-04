@@ -21,24 +21,28 @@ public class Main {
         manager.createSubTask("Забронировать отель", "Отель 5 звезд", TaskStatus.DONE, TaskType.SUBTASK_TYPE, 10);
         manager.createSubTask("Собрать вещи", "Ничего не забыть", TaskStatus.IN_PROGRESS, TaskType.SUBTASK_TYPE, 10);
 
-//        System.out.println(manager.getTaskById(1));
-//
-//        System.out.println(manager.getEpicById(2));
-//        System.out.println(manager.getSubTaskById(3));
-//        System.out.println(manager.getSubTaskById(4));
-//        System.out.println(manager.getSubTaskById(5));
-//
-//        System.out.println(manager.getEpicById(6));
-//        System.out.println(manager.getSubTaskById(7));
-//        System.out.println(manager.getSubTaskById(8));
-//        System.out.println(manager.getSubTaskById(9));
-//
-//        System.out.println(manager.getEpicById(10));
-//        System.out.println(manager.getSubTaskById(11));
-//        System.out.println(manager.getSubTaskById(12));
-//        System.out.println(manager.getSubTaskById(13));
-//
-//        System.out.println(manager.getHistory());
+        System.out.println(manager.getTaskById(1));
+
+        System.out.println(manager.getEpicById(2));
+        System.out.println(manager.getSubTaskById(3));
+        System.out.println(manager.getSubTaskById(4));
+        System.out.println(manager.getSubTaskById(5));
+
+        System.out.println(manager.getEpicById(6));
+        System.out.println(manager.getSubTaskById(7));
+        System.out.println(manager.getSubTaskById(8));
+        System.out.println(manager.getSubTaskById(9));
+
+        System.out.println(manager.getEpicById(10));
+        System.out.println(manager.getSubTaskById(11));
+        System.out.println(manager.getSubTaskById(12));
+        System.out.println(manager.getSubTaskById(13));
+
+        System.out.println(manager.getHistory());
+        manager.deleteTaskById(1);
+        manager.deleteEpicById(2);
+        manager.deleteSubTaskById(13);
+        System.out.println(manager.getHistory());
 
     }
 }
