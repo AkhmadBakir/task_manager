@@ -1,19 +1,14 @@
 id,name,description,status,type
 
-14
+9
 1,Сходить в кино,Купить билеты,IN_PROGRESS,TASK_TYPE
-10,Сходить в кино,Купить билеты,IN_PROGRESS,TASK_TYPE
 2,Сделать ремонт,Ремонт должен быть хорошим,IN_PROGRESS,EPIC_TYPE,3/4/5
 6,Построить дом,Дом должен быть большим,IN_PROGRESS,EPIC_TYPE,7/8/9
-11,Сделать ремонт,Ремонт должен быть хорошим,IN_PROGRESS,EPIC_TYPE,12/13/14
 3,Сделать полы,Полы из ламината,DONE,SUBTASK_TYPE,2
 4,Поклеить обои,Обои красивые,DONE,SUBTASK_TYPE,2
 5,Сделать потолок,Потолок натяжной,IN_PROGRESS,SUBTASK_TYPE,2
 7,Сделать фундамент,Фундамент из бетона,DONE,SUBTASK_TYPE,6
 8,Сделать стены,Стены из досок,DONE,SUBTASK_TYPE,6
 9,Сделать крышу,Крыша из металла,IN_PROGRESS,SUBTASK_TYPE,6
-12,Сделать полы,Полы из ламината,DONE,SUBTASK_TYPE,11
-13,Поклеить обои,Обои красивые,DONE,SUBTASK_TYPE,11
-14,Сделать потолок,Потолок натяжной,IN_PROGRESS,SUBTASK_TYPE,11
 
-1,2,6,3,4,5,7,8,9
+1,2,3,4,5,6,7,8,9

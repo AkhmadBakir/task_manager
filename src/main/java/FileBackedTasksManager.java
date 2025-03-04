@@ -149,7 +149,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
                                 fileBackedTasksManager.task.put(id, task);
                             }
                             case "EPIC_TYPE" -> {
-
                                 Epic epic = (Epic) fromString(line);
                                 fileBackedTasksManager.epic.put(id, epic);
                             }
@@ -291,20 +290,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 //        System.out.println(fileBackedTasksManager1.getSubTaskById(9));
 //        System.out.println(fileBackedTasksManager1.getHistory());
 
-//        FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(file);
+        FileBackedTasksManager fileBackedTasksManager2 = loadFromFile(file);
 
-//        System.out.println(fileBackedTasksManager2.getTaskById(1));
-//        System.out.println(fileBackedTasksManager2.getEpicById(2));
-//        System.out.println(fileBackedTasksManager2.getSubTaskById(3));
-//        System.out.println(fileBackedTasksManager2.getSubTaskById(4));
-//        System.out.println(fileBackedTasksManager2.getSubTaskById(5));
-//        System.out.println(fileBackedTasksManager2.getEpicById(6));
-//        System.out.println(fileBackedTasksManager2.getSubTaskById(7));
-//        System.out.println(fileBackedTasksManager2.getSubTaskById(8));
-//        System.out.println(fileBackedTasksManager2.getSubTaskById(9));
-//        System.out.println(fileBackedTasksManager2.getHistory());
+        System.out.println(fileBackedTasksManager2.getTaskById(1));
+        System.out.println(fileBackedTasksManager2.getEpicById(2));
+        System.out.println(fileBackedTasksManager2.getSubTaskById(3));
+        System.out.println(fileBackedTasksManager2.getSubTaskById(4));
+        System.out.println(fileBackedTasksManager2.getSubTaskById(5));
+        System.out.println(fileBackedTasksManager2.getEpicById(6));
+        System.out.println(fileBackedTasksManager2.getSubTaskById(7));
+        System.out.println(fileBackedTasksManager2.getSubTaskById(8));
+        System.out.println(fileBackedTasksManager2.getSubTaskById(9));
+        System.out.println(fileBackedTasksManager2.getHistory());
 
-//        fileBackedTasksManager2.deleteEpicById(2);
+        //fileBackedTasksManager2.deleteAllTasks();
 
 //        fileBackedTasksManager2.createTask("Сходить в театр", "Билеты куплены", TaskStatus.IN_PROGRESS, TaskType.TASK_TYPE);
 //        System.out.println(fileBackedTasksManager2.getTaskById(10));
