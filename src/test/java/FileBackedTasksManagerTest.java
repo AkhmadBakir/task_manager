@@ -7,12 +7,23 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTasksManagerTest {
 
     File file = new File("historyTestFileSave.csv");
     FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+
+    @BeforeEach
+    void init() {
+        fileBackedTasksManager.task.clear();
+        fileBackedTasksManager.epic.clear();
+        fileBackedTasksManager.subTask.clear();
+
+        try(FileWriter fileWriter = new FileWriter(file, false)) {
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Test
     void shouldFileBackedTasksManagerSaveInFile() {
@@ -52,7 +63,7 @@ class FileBackedTasksManagerTest {
         historyManager.add(new Epic(2, "Сделать ремонт", "Ремонт должен быть хорошим", TaskStatus.IN_PROGRESS, TaskType.EPIC_TYPE));
         historyManager.add(new SubTask(3, "Сделать полы", "Полы из ламината", TaskStatus.DONE, TaskType.SUBTASK_TYPE, 2));
         String historyForString = FileBackedTasksManager.historyToString(historyManager);
-        assertEquals("1,2,3", historyForString);
+        assertThat(historyForString).isEqualTo("1,2,3");
     }
 
     @Test
@@ -78,19 +89,6 @@ class FileBackedTasksManagerTest {
                 .isNotNull()
                 .extracting(SubTask::getName, SubTask::getDescription, SubTask::getStatus, SubTask::getType, SubTask::getEpicId)
                 .containsExactly("Сделать полы", "Полы из ламината", TaskStatus.DONE, TaskType.SUBTASK_TYPE, 2);
-    }
-
-
-    @BeforeEach
-    void init() {
-        fileBackedTasksManager.task.clear();
-        fileBackedTasksManager.epic.clear();
-        fileBackedTasksManager.subTask.clear();
-
-        try(FileWriter fileWriter = new FileWriter(file, false)) {
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Test
