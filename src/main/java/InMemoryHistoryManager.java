@@ -3,41 +3,30 @@ import java.util.*;
 public class InMemoryHistoryManager implements HistoryManager {
 
     private final CustomLinkedList<Task> tasksHistory = new CustomLinkedList<>(10);
-    private final HashMap<Integer, Map<TaskType, CustomLinkedList.Node<Task>>> nodeMap = new HashMap<>();
+    private final HashMap<Integer, CustomLinkedList.Node<Task>> nodeMap = new HashMap<>();
 
     @Override
     public void add(Task task) {
-        Map<TaskType, CustomLinkedList.Node<Task>> typeMap = nodeMap.computeIfAbsent(task.getId(), k -> new HashMap<>());
-        CustomLinkedList.Node<Task> existingNode = typeMap.get(task.getType());
-
-        if (existingNode != null) {
-            tasksHistory.removeNode(existingNode);
-        }
-
         CustomLinkedList.Node<Task> newNode = tasksHistory.linkLast(task);
-        typeMap.put(task.getType(), newNode);
-
+        if (nodeMap.containsKey(task.getId())) {
+            remove(task.getId());
+        }
+        nodeMap.put(task.getId(), newNode);
         if (tasksHistory.size() > tasksHistory.getLimit()) {
             CustomLinkedList.Node<Task> oldestNode = tasksHistory.getHead();
             if (oldestNode != null) {
                 tasksHistory.removeNode(oldestNode);
-                nodeMap.get(oldestNode.data.getId()).remove(oldestNode.data.getType());
+                nodeMap.remove(oldestNode.data.getId());
             }
         }
     }
 
     @Override
-    public void remove(int id, TaskType type) {
-        Map<TaskType, CustomLinkedList.Node<Task>> typeMap = nodeMap.get(id);
-        if (typeMap != null) {
-            CustomLinkedList.Node<Task> node = typeMap.get(type);
-            if (node != null) {
-                tasksHistory.removeNode(node);
-                typeMap.remove(type);
-                if (typeMap.isEmpty()) {
-                    nodeMap.remove(id);
-                }
-            }
+    public void remove(int id) {
+        CustomLinkedList.Node<Task> node = nodeMap.get(id);
+        if (node != null) {
+            tasksHistory.removeNode(node);
+            nodeMap.remove(id);
         }
     }
 
