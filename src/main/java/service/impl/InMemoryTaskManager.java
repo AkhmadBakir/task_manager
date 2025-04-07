@@ -1,3 +1,14 @@
+package service.impl;
+
+import enums.TaskStatus;
+import enums.TaskType;
+import model.Epic;
+import model.SubTask;
+import model.Task;
+import service.HistoryManager;
+import service.TaskManager;
+import util.Managers;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -6,27 +17,35 @@ public class InMemoryTaskManager implements TaskManager {
 
     private int identifier = 0;
 
-    Map<Integer, Task> task = new HashMap<>();
-    Map<Integer, Epic> epic = new HashMap<>();
-    Map<Integer, SubTask> subTask = new HashMap<>();
+    protected Map<Integer, Task> task = new HashMap<>();
+    protected Map<Integer, Epic> epic = new HashMap<>();
+    protected Map<Integer, SubTask> subTask = new HashMap<>();
 
     private final HistoryManager history = Managers.getDefaultHistory();
 
     @Override
-    public void createTask(String name, String description, TaskStatus status, TaskType type) {
-        task.put(++identifier, new Task(identifier, name, description, status, type));
+    public Task createTask(String name, String description) {
+        Task newTask = new Task(name, description);
+        newTask.setId(++identifier);
+        task.put(identifier, newTask);
+        return newTask;
     }
 
     @Override
-    public void createEpic(String name, String description, TaskStatus status, TaskType type) {
-        epic.put(++identifier, new Epic(identifier, name, description, status, type));
+    public Epic createEpic(String name, String description) {
+        Epic newEpic = new Epic(name, description);
+        newEpic.setId(++identifier);
+        epic.put(identifier, newEpic);
+        return newEpic;
     }
 
     @Override
-    public void createSubTask(String name, String description, TaskStatus status, TaskType type, int id) {
-        SubTask subTask1 = new SubTask(++identifier, name, description, status, type, id);
-        subTask.put(identifier, subTask1);
-        epic.get(id).addSubTask(subTask1.getId());
+    public SubTask createSubTask(String name, String description, int id) {
+        SubTask newSubTask = new SubTask(name, description, id);
+        newSubTask.setId(++identifier);
+        subTask.put(identifier, newSubTask);
+        epic.get(id).addSubTask(newSubTask.getId());
+        return newSubTask;
     }
 
     @Override
@@ -68,32 +87,27 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTaskById(int id, String name, String description, TaskStatus status) {
-        if (task.containsKey(id)) {
-            task.get(id).setName(name);
-            task.get(id).setDescription(description);
-            task.get(id).setStatus(status);
+    public void updateTaskById(Task updateTask) {
+        if (task.containsKey(updateTask.getId())) {
+            task.put(updateTask.getId(), updateTask);
         }
     }
 
     @Override
-    public void updateEpicById(int id, String name, String description, TaskStatus status) {
-        if (epic.containsKey(id)) {
-            epic.get(id).setName(name);
-            epic.get(id).setDescription(description);
-            epic.get(id).setStatus(status);
+    public void updateEpicById(Epic updateEpic) {
+        if (epic.containsKey(updateEpic.getId())) {
+            epic.put(updateEpic.getId(), updateEpic);
         }
     }
 
     @Override
-    public void updateSubTaskById(int id, String name, String description, TaskStatus status) {
-        if (subTask.containsKey(id)) {
-            subTask.get(id).setName(name);
-            subTask.get(id).setDescription(description);
-            subTask.get(id).setStatus(status);
+    public void updateSubTaskById(SubTask updateSubTask) {
+        if (subTask.containsKey(updateSubTask.getId())) {
+            subTask.put(updateSubTask.getId(), updateSubTask);
+
             boolean flag = true;
-            if (status == TaskStatus.DONE) {
-                List<Integer> subTasksInEpic = epic.get(subTask.get(id).getEpicId()).getSubTaskIds();
+            if (updateSubTask.getStatus() == TaskStatus.DONE) {
+                List<Integer> subTasksInEpic = epic.get(subTask.get(updateSubTask.getId()).getEpicId()).getSubTaskIds();
                 for (Integer item : subTasksInEpic) {
                     if (!subTask.get(item).getStatus().equals(TaskStatus.DONE)) {
                         flag = false;
@@ -101,7 +115,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
             if (flag) {
-                epic.get(subTask.get(id).getEpicId()).setStatus(TaskStatus.DONE);
+                epic.get(updateSubTask.getEpicId()).setStatus(TaskStatus.DONE);
             }
         }
     }
@@ -137,6 +151,15 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+    public Map<Integer, Task> getAllTasks() {
+        Map<Integer, Task> allTasks = new HashMap<>();
+        allTasks.putAll(task);
+        allTasks.putAll(epic);
+        allTasks.putAll(subTask);
+        return allTasks;
+    }
+
+    @Override
     public List<Integer> getSubTasksInEpic(int id) {
         if (epic.containsKey(id)) {
             return epic.get(id).getSubTaskIds();
@@ -160,4 +183,10 @@ public class InMemoryTaskManager implements TaskManager {
     public int getIdentifier() { return identifier; }
 
     public void setIdentifier(int identifier) { this.identifier = identifier; }
+
+    public Map<Integer, Task> getTask() { return task; }
+
+    public Map<Integer, Epic> getEpic() { return epic; }
+
+    public Map<Integer, SubTask> getSubTask() { return subTask; }
 }

@@ -1,3 +1,7 @@
+package model;
+
+import enums.TaskType;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -6,8 +10,9 @@ public class Epic extends Task {
 
     private final List<Integer> subTaskIds;
     
-    public Epic(int id, String name, String description, TaskStatus status, TaskType type) {
-        super(id, name, description, status, type);
+    public Epic(String name, String description) {
+        super(name, description);
+        super.setType(TaskType.EPIC_TYPE);
         this.subTaskIds = new ArrayList<Integer>();
     }
 
@@ -34,6 +39,11 @@ public class Epic extends Task {
                 stringBuilder.append("/");
             }
         }
-        return super.toString() + "," + stringBuilder.toString();
+        if (!stringBuilder.toString().isEmpty()) {
+            return super.toString() + "," + stringBuilder.toString();
+        } else {
+            return super.toString();
+        }
+
     }
 }
