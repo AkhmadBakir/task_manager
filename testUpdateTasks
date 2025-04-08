@@ -1,0 +1,7 @@
+id,name,description,status,type
+
+2
+1,Сходил в кино,Купил билеты,DONE,TASK_TYPE
+2,Сходить в кино,Купить билеты,NEW,TASK_TYPE
+
+1

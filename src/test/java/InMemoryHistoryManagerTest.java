@@ -1,21 +1,26 @@
+import model.Task;
 import org.junit.jupiter.api.Test;
+import service.impl.InMemoryHistoryManager;
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class InMemoryHistoryManagerTest {
 
     InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
-    Task task = new Task(1, "Сходить в кино", "Купить билеты", TaskStatus.IN_PROGRESS, TaskType.TASK_TYPE);
+    Task testTask = new Task("Сходить в кино", "Купить билеты");
+
     @Test
     void add() {
-         inMemoryHistoryManager.add(task);
+         inMemoryHistoryManager.add(testTask);
          assertThat(inMemoryHistoryManager.getTasks())
                  .hasSize(1)
-                 .containsExactly(task);
+                 .containsExactly(testTask);
     }
 
     @Test
     void remove() {
-        inMemoryHistoryManager.add(task);
+        testTask.setId(1);
+        inMemoryHistoryManager.add(testTask);
         inMemoryHistoryManager.remove(1);
         assertThat(inMemoryHistoryManager.getTasks())
                 .hasSize(0);
@@ -23,15 +28,15 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void getTasks() {
-        inMemoryHistoryManager.add(task);
+        inMemoryHistoryManager.add(testTask);
         assertThat(inMemoryHistoryManager.getTasks())
                 .hasSize(1)
-                .containsExactly(task);
+                .containsExactly(testTask);
     }
 
     @Test
     void removeAll() {
-        inMemoryHistoryManager.add(task);
+        inMemoryHistoryManager.add(testTask);
         inMemoryHistoryManager.removeAll();
         assertThat(inMemoryHistoryManager.getTasks())
                 .hasSize(0);

@@ -1,10 +1,14 @@
+package util;
+
+import model.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CustomLinkedList<T extends Task> {
 
     public static class Node<E> {
-        E data;
+        public E data;
         Node<E> prev;
         Node<E> next;
 
