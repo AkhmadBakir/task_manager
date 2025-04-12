@@ -1,3 +1,9 @@
+package service.impl;
+
+import model.Task;
+import service.HistoryManager;
+import util.CustomLinkedList;
+
 import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {

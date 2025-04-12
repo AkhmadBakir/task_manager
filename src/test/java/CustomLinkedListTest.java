@@ -5,17 +5,17 @@ import java.util.List;
 
 class CustomLinkedListTest {
 
-    CustomLinkedList<Task> linkedListTest;
-    Task task1;
-    Task task2;
-    Task task3;
+    util.CustomLinkedList<model.Task> linkedListTest;
+    model.Task task1;
+    model.Task task2;
+    model.Task task3;
 
     @BeforeEach
     public void set() {
-        linkedListTest = new CustomLinkedList<>(3);
-        task1 = new Task(1, "Сходить в кино", "Купить билеты", TaskStatus.IN_PROGRESS, TaskType.TASK_TYPE);
-        task2 = new Epic(2, "Построить дом", "Дом должен быть большим", TaskStatus.IN_PROGRESS, TaskType.EPIC_TYPE);
-        task3 = new SubTask(3, "Сделать фундамент", "Фундамент из бетона", TaskStatus.DONE, TaskType.SUBTASK_TYPE, 6);
+        linkedListTest = new util.CustomLinkedList<>(3);
+        task1 = new model.Task("Сходить в кино", "Купить билеты");
+        task2 = new model.Epic("Построить дом", "Дом должен быть большим");
+        task3 = new model.SubTask("Сделать фундамент", "Фундамент из бетона", 6);
     }
 
 
@@ -24,7 +24,7 @@ class CustomLinkedListTest {
         linkedListTest.linkLast(task1);
         linkedListTest.linkLast(task2);
         linkedListTest.linkLast(task3);
-        List<Task> tasks = linkedListTest.getTasks();
+        List<model.Task> tasks = linkedListTest.getTasks();
 
         assertThat(tasks).hasSize(3)
                 .containsExactly(task1, task2, task3);
@@ -32,11 +32,11 @@ class CustomLinkedListTest {
 
     @Test
     void shouldRemoveNode() {
-        CustomLinkedList.Node<Task> node1 = linkedListTest.linkLast(task1);
-        CustomLinkedList.Node<Task> node2 = linkedListTest.linkLast(task2);
-        CustomLinkedList.Node<Task> node3 = linkedListTest.linkLast(task3);
+        util.CustomLinkedList.Node<model.Task> node1 = linkedListTest.linkLast(task1);
+        util.CustomLinkedList.Node<model.Task> node2 = linkedListTest.linkLast(task2);
+        util.CustomLinkedList.Node<model.Task> node3 = linkedListTest.linkLast(task3);
         linkedListTest.removeNode(node1);
-        List<Task> tasks = linkedListTest.getTasks();
+        List<model.Task> tasks = linkedListTest.getTasks();
 
         assertThat(tasks).hasSize(2)
                 .containsExactly(task2, task3);
